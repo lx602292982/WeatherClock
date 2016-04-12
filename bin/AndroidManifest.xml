@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.spreadwin.weatherclock"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <!-- 开机启动权限 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- 这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="21" />
+
+    <application
+        android:name="com.spreadwin.weatherclock.ClockApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- 百度地图SDK KEY -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="TmU92bduEzn4kXPGYtBHjAHe" />
+        <!-- 聚合数据SDK KEY -->
+        <meta-data
+            android:name="com.thinkland.juheapi.openid"
+            android:value="JHc487747cac4ec6ca477c2b6e7439ab9f" >
+        </meta-data>
+
+        <!-- 定时服务监听 -->
+        <receiver android:name="com.spreadwin.weatherclock.support.AlarmReceiver" >
+            <intent-filter>
+                <action android:name="com.intent.action.FLYAUDIOSKY.SERVICE" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 后台数据请求服务 -->
+        <service
+            android:name="com.spreadwin.weatherclock.support.BackService"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter android:priority="1000" >
+                <action android:name="com.intent.action.FLYAUDIOSKY.SERVICE" />
+            </intent-filter>
+        </service>
+
+        <!-- 定时服务 -->
+        <service android:name="com.spreadwin.weatherclock.support.TimeService" >
+            <intent-filter>
+                <action android:name="com.spreadwin.flyaudio.update.TIMESERVICE" />
+            </intent-filter>
+        </service>
+
+        <!-- 定位服务 -->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" >
+        </service>
+
+        <receiver android:name="com.spreadwin.weatherclock.support.BackService$WeatherReceiver" >
+            <intent-filter>
+                <action android:name="com.spreadwin.request.getweatherinfo" />
+                <action android:name="com.intent.action.FLYAUDIOSKY.SERVICE" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>
